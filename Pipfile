@@ -5,6 +5,9 @@ name = "pypi"
 
 [packages]
 arrow = "*"
+black = "*"
+pylint = "*"
+pyserial = "*"
 
 [dev-packages]
 
