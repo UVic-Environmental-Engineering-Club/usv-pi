@@ -1,0 +1,11 @@
+{
+    "python.languageServer": "Pylance",
+    "python.autoComplete.extraPaths": [
+        "./src"
+    ],
+    "python.analysis.extraPaths": [
+        "./src"
+    ],
+    "python.linting.pylintEnabled": true,
+    "python.formatting.provider": "black",
+}
