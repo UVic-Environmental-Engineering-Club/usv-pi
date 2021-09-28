@@ -10,3 +10,5 @@ class EventType(Enum):
     WEBSOCKET_OUT = 2
     DATABASE_WRITE = 3
     DATABASE_READ = 4
+    SERIAL_IN = 5
+    SERIAL_OUT = 5
