@@ -21,12 +21,12 @@ def driver_loop():
 
 def add_gps_coord(route: List[GpsCoord], coord: GpsCoord) -> List[GpsCoord]:
     """Adds a GpsCoord to the route"""
-    return route.append(coord)
+    return route + [coord]
 
 
 def remove_gps_coord(route: List[GpsCoord], coord: GpsCoord) -> List[GpsCoord]:
     """Removes a GpsCoord to the route"""
-    return route.remove(coord)
+    return [curCoord for curCoord in route if curCoord != coord]
 
 
 def reset_route() -> List[GpsCoord]:
