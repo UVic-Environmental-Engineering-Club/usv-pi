@@ -23,6 +23,7 @@ def add_gps_coord(route: List[GpsCoord], coord: GpsCoord) -> List[GpsCoord]:
     """Adds a GpsCoord to the route"""
     return route.append(coord)
 
+
 def remove_gps_coord(route: List[GpsCoord], coord: GpsCoord) -> List[GpsCoord]:
     """Removes a GpsCoord to the route"""
     return route.remove(coord)
