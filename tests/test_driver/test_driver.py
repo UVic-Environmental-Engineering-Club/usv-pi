@@ -1,7 +1,10 @@
 import unittest
 
-from data_classes.sensor.data_in import GpsCoord
-from driver.driver import add_gps_coord
+# from data_classes.sensor.data_in import GpsCoord
+from src.data_classes.sensor.data_in import GpsCoord
+from src.driver.driver import add_gps_coord
+
+#from driver.driver import add_gps_coord
 
 
 class TestDriver(unittest.TestCase):
