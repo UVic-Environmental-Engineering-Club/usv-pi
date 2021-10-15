@@ -18,12 +18,14 @@ class TestDriver(unittest.TestCase):
 
 
     # Test you can add a coord to an empty route
-    def test_addGPSCoordEmptyList(self):
+    def test_addGPSCoordEmptyRoute(self):
+        """Succesfully add a coordinate to an empty route"""
         pass
 
 
     # Check a new new coord was successsfully added
-    def test_addGPSCoordSuccessfullyAdded(self):
+    def test_addGPSCoordNormalRoute(self):
+       """Successfully add a coordinate to a non-empty route"""
        pass
 
     # 
