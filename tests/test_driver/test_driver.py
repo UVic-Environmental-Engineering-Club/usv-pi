@@ -1,7 +1,7 @@
 import unittest
 
 from src.data_classes.sensor.data_in import GpsCoord
-from src.driver.driver import add_gps_coord
+from src.driver.driver import add_gps_coord, remove_gps_coord
 
 class TestDriver(unittest.TestCase):
 
@@ -51,7 +51,59 @@ class TestDriver(unittest.TestCase):
     ## remove_gps_coord() Tests ##
     ##############################
 
+    def test_removeGPSCoordOnEmptyRoute(self):
+        """Ensure an error is not thrown when called to remove a coordinate on an empty list"""
+        coord1 = GpsCoord(1, 2.00, 3.00)
+        route = []
+        remove_gps_coord(route, coord1)
+        # A test will fail if any unhandled exception is raised (no assert)
+
+
+    def test_removeGPSCoordWithOneCoord(self):
+        """Ensure the function can successfully remove a coordinate that exists in the route one time"""
+        coord1 = GpsCoord(1, 2.00, 3.00)
+        coord2 = GpsCoord(2, 4.00, 6.00)
+        coord3 = GpsCoord(3, 6.00, 9.00)
+        route = [coord1, coord2, coord3]
+        result = [coord2, coord3]
+        self.assertEqual(result, remove_gps_coord(route, coord1))
+
+
+    def test_removeGPSCoordWithReoccurringCoord(self):
+        """Ensure the function can remove all occurences of a coord in the route"""
+        coord1 = GpsCoord(1, 2.00, 3.00)
+        coord2 = GpsCoord(2, 4.00, 6.00)
+        coord3 = GpsCoord(3, 6.00, 9.00)
+        route = [coord2, coord1, coord2, coord3, coord1, coord3]
+        result = [coord2, coord2, coord3, coord3]
+        self.assertEqual(result, remove_gps_coord(route, coord1))
+
+
+    def test_removeGPSCoordOnRouteWithBadCoord(self):
+        """"Ensure calling the function with a coord not on the route does not change the route"""
+        coord1 = GpsCoord(1, 2.00, 3.00)
+        coord2 = GpsCoord(2, 4.00, 6.00)
+        coord3 = GpsCoord(3, 6.00, 9.00)
+        coord4 = GpsCoord(4, 8.00, 12.00)
+        route = [coord2, coord1, coord2, coord3, coord1, coord3, coord2]
+        result = [coord2, coord1, coord2, coord3, coord1, coord3, coord2]
+        self.assertEqual(result, remove_gps_coord(route, coord4))
+
+
+
+    #########################
+    ## reset_route() Tests ##
+    #########################
+
+
+    ###########################
+    ## start_route() Tests ##
+    ###########################
+
+
+    ###########################
+    ## pause_route() Tests ##
+    ###########################
 
 if __name__ == '__main__':
     unittest.main()
-    
