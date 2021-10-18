@@ -4,9 +4,7 @@ from src.data_classes.sensor.data_in import GpsCoord
 from src.driver.driver import add_gps_coord
 
 class TestDriver(unittest.TestCase):
-    
 
-    
     ###########################
     ## add_gps_coord() Tests ##
     ###########################
@@ -56,3 +54,4 @@ class TestDriver(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+    
