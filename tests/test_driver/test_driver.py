@@ -1,7 +1,7 @@
 import unittest
 
 from src.data_classes.sensor.data_in import GpsCoord
-from src.driver.driver import add_gps_coord, remove_gps_coord
+from src.driver.driver import add_gps_coord, remove_gps_coord, reset_route
 
 class TestDriver(unittest.TestCase):
 
@@ -79,6 +79,17 @@ class TestDriver(unittest.TestCase):
         self.assertEqual(result, remove_gps_coord(route, coord1))
 
 
+    def test_removeGPSCoordDoesNotChangeOriginalRoute(self):
+        """Ensure function does not change the original route (it returns a new, altered list)"""
+        coord1 = GpsCoord(1, 2.00, 3.00)
+        coord2 = GpsCoord(2, 4.00, 6.00)
+        coord3 = GpsCoord(3, 6.00, 9.00)
+        route = [coord2, coord1, coord2, coord3, coord1, coord3]
+        result = [coord2, coord1, coord2, coord3, coord1, coord3]
+        remove_gps_coord(route, coord1)
+        self.assertEqual(route, result)
+
+
     def test_removeGPSCoordOnRouteWithBadCoord(self):
         """"Ensure calling the function with a coord not on the route does not change the route"""
         coord1 = GpsCoord(1, 2.00, 3.00)
@@ -94,6 +105,18 @@ class TestDriver(unittest.TestCase):
     #########################
     ## reset_route() Tests ##
     #########################
+
+    def test_resetRouteIsEmptyList(self):
+        """Ensure an empty list is returned"""
+        self.assertEqual(0, len(reset_route()) )
+
+
+    def test_resetRouteCanAddGpsCoord(self):
+        """Ensure you can add GpsCoord's to the reset route"""
+        route = reset_route()
+        coord1 = GpsCoord(1, 2.00, 3.00)
+        self.assertEqual([coord1], route + [coord1])
+
 
 
     ###########################
