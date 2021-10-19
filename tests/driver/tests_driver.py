@@ -100,11 +100,9 @@ class TestDriver(unittest.TestCase):
         self.assertEqual(result, remove_gps_coord(route, coord4))
 
 
-
     """
     reset_route() Tests 
-    """
-    
+    """ 
 
     def test_resetRouteIsEmptyList(self):
         """Ensure an empty list is returned"""
@@ -116,7 +114,6 @@ class TestDriver(unittest.TestCase):
         route = reset_route()
         coord1 = GpsCoord(1, 2.00, 3.00)
         self.assertEqual([coord1], route + [coord1])
-
 
 
     """
