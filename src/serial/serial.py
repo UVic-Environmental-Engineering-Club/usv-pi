@@ -1,16 +1,11 @@
 """ Functions for things related to serial and pySerial """
 
 import time
-from multiprocessing import Process
+from typing import List, Tuple, Any
+from src.events.event_type import EventType
 
 
-def init_serial_process() -> Process:
-    """Returns the serial process"""
-
-    return Process(target=serial_loop)
-
-
-def serial_loop():
+def serial_loop(event_list: List[Tuple[EventType, Any]]):
     """Serial loop with two threads, one for reading, one for writing"""
     """https://stackoverflow.com/questions/39127158/small-example-for-pyserial-using-threading"""
     while True:

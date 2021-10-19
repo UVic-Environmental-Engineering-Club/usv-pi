@@ -1,5 +1,7 @@
 """ Handles serial events"""
 
+from multiprocessing import Manager
+from typing import Dict, Callable, Any, List
 from src.events.event_type import EventType
 from src.events.events import subscribe
 from src.data_classes.sensor.data_in import SensorIn
@@ -16,7 +18,9 @@ def handle_serial_out(data: SensorOut):
     pass
 
 
-def setup_serial_handlers():
+def setup_serial_handlers(
+    manager: Manager, subscribers: Dict[EventType, List[Callable[[Any], Any]]]
+):
     """Setup serial handlers for EventTypes"""
-    subscribe(EventType.SERIAL_IN, handle_serial_in)
-    subscribe(EventType.SERIAL_OUT, handle_serial_out)
+    subscribe(manager, subscribers, EventType.SERIAL_IN, handle_serial_in)
+    subscribe(manager, subscribers, EventType.SERIAL_OUT, handle_serial_out)

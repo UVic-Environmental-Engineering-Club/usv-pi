@@ -1,18 +1,12 @@
 """ Functions that drive the boat """
 
 import time
-from typing import List
-from multiprocessing import Process
+from typing import List, Tuple, Any
+from src.events.event_type import EventType
 from src.data_classes.sensor.data_in import GpsCoord
 
 
-def init_driver_process() -> Process:
-    """Returns the driver process"""
-
-    return Process(target=driver_loop)
-
-
-def driver_loop():
+def driver_loop(event_list: List[Tuple[EventType, Any]]):
     """Driver process logic lives in here"""
     while True:
         print("driver process!")
@@ -34,13 +28,13 @@ def reset_route() -> List[GpsCoord]:
     return []
 
 
-def start_route(route: List[GpsCoord], start_target: GpsCoord) -> Process:
+def start_route(route: List[GpsCoord], start_target: GpsCoord) -> None:
     """
     Starts a process (multiprocess from another core) to follow a route.
     Process will start from current location from start_target,
     start_target is in case it was paused previously
     """
-    return init_driver_process()
+    pass
 
 
 def pause_route(route: List[GpsCoord]) -> GpsCoord:

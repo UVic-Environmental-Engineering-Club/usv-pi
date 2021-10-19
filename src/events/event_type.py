@@ -11,4 +11,4 @@ class EventType(Enum):
     DATABASE_WRITE = 3
     DATABASE_READ = 4
     SERIAL_IN = 5
-    SERIAL_OUT = 5
+    SERIAL_OUT = 6

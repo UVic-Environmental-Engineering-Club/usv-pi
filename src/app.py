@@ -1,11 +1,12 @@
 """ Main loop that is run on the Raspberry Pi on the USV 🛳⚓️ """
 
-from typing import List, Optional, Dict
-from multiprocessing import Process
+from typing import List, Optional, Dict, Callable, Any, Tuple
+from multiprocessing import Process, Manager
 from serial import Serial
-from src.serial.serial import init_serial_process
-from src.driver.driver import init_driver_process
+from src.serial.serial import serial_loop
+from src.driver.driver import driver_loop
 from src.events.events import run_event_loop
+from src.events.event_type import EventType
 from src.database.database_listener import setup_database_handlers
 from src.serial.serial_listener import setup_serial_handlers
 from src.socketio.socketio_listener import setup_socketio_handlers
@@ -23,15 +24,22 @@ with open(file="config.json", mode="r", encoding="utf-8") as file:
 
 def run():
     """Used to start the loop in __main__"""
-    setup_database_handlers()
-    setup_serial_handlers()
-    setup_socketio_handlers()
+    with Manager() as manager:
+        subscribers: Dict[EventType, List[Callable[[Any], Any]]] = manager.dict()
+        event_list: List[Tuple[EventType, Any]] = manager.list()
 
-    processes["driver"] = init_driver_process()
-    processes["serial"] = init_serial_process()
+        setup_database_handlers(manager, subscribers)
+        setup_serial_handlers(manager, subscribers)
+        setup_socketio_handlers(manager, subscribers)
 
-    for _, process in processes.items():
-        process.start()
+        processes["driver"] = Process(target=driver_loop, args=(event_list,))
+        processes["serial"] = Process(target=serial_loop, args=(event_list,))
+        processes["event_loop"] = Process(
+            target=run_event_loop, args=(subscribers, event_list)
+        )
 
-    # Infinite event loop
-    Process(target=run_event_loop).start()
+        for _, process in processes.items():
+            process.start()
+
+        for _, process in processes.items():
+            process.join()

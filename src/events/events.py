@@ -1,26 +1,31 @@
 """ Subscriber/Observer programming paradigm """
 
 import functools
-from multiprocessing import Pool
+from multiprocessing import Manager, Pool
 from multiprocessing.context import Process
 from typing import Dict, List, Any, Tuple
 from collections.abc import Callable
 from src.events.event_type import EventType
 
-subscribers: Dict[EventType, List[Callable[[Any], Any]]] = {}
-event_list: List[Tuple[EventType, Any]] = []
 
-
-def subscribe(event: EventType, func: Callable[[Any], Any]) -> None:
+def subscribe(
+    manager: Manager,
+    subscribers: Dict[EventType, List[Callable[[Any], Any]]],
+    event: EventType,
+    func: Callable[[Any], Any],
+) -> None:
     """Adds an EventType and observer function to subscribers"""
     if not event in subscribers:
-        subscribers[event] = []
+        subscribers[event] = manager.list()
     subscribers[event].append(func)
 
 
-def post_event(event: EventType, data: Any) -> None:
+def post_event(
+    event_list: List[Tuple[EventType, Any]], event: EventType, data: Any
+) -> None:
     """Runs all observer functions for the EventType"""
     event_list.append((event, data))
+    print(event_list)
 
 
 def smap(func) -> Callable[[Any], Any]:
@@ -28,7 +33,10 @@ def smap(func) -> Callable[[Any], Any]:
     return func()
 
 
-def run_event_loop():
+def run_event_loop(
+    subscribers: Dict[EventType, List[Callable[[Any], Any]]],
+    event_list: List[Tuple[EventType, Any]],
+) -> None:
     """Infinite loop for running event loop"""
     while True:
         if len(event_list) != 0:
