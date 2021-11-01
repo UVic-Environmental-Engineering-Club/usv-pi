@@ -2,6 +2,8 @@
 
 This is the software that is going to run inside the Raspberry Pi on the unmanned surface vehicle (USV).
 
+[Project Structure for USV](https://github.com/UVic-Environmental-Engineering-Club/USV-Pi/wiki/Project-Structure)
+
 ## Docker
 
 - To build the docker image
