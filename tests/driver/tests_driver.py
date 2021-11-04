@@ -6,7 +6,7 @@ from src.data_classes.sensor.data_in import GpsCoord
 from src.driver.driver import add_gps_coord, remove_gps_coord, reset_route
 
 class TestDriver(unittest.TestCase):
-    """ Unit Testing for methods in driver.py except start_route() and pause_route() """
+    """ Unit Testing for all methods in driver.py except start_route() and pause_route() """
 
     def test_add_gps_coord_not_none(self):
         """Ensure function does not return none"""
