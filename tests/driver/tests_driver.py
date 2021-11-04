@@ -6,10 +6,7 @@ from src.data_classes.sensor.data_in import GpsCoord
 from src.driver.driver import add_gps_coord, remove_gps_coord, reset_route
 
 class TestDriver(unittest.TestCase):
-
-    """
-    add_gps_coord() Tests
-    """
+    """ Unit Testing for methods in driver.py except start_route() and pause_route() """
 
     def test_add_gps_coord_not_none(self):
         """Ensure function does not return none"""
@@ -47,10 +44,6 @@ class TestDriver(unittest.TestCase):
         add_gps_coord(route, coord3)
         self.assertEqual(route, result)
 
-
-    """
-    remove_gps_coord() Tests
-    """
 
     def test_remove_gps_coord_on_empty_route(self):
         """Ensure an error is not thrown when called to remove a coordinate on an empty list"""
@@ -102,10 +95,6 @@ class TestDriver(unittest.TestCase):
         self.assertEqual(result, remove_gps_coord(route, coord4))
 
 
-    """
-    reset_route() Tests 
-    """
-
     def test_reset_route_is_empty_list(self):
         """Ensure an empty list is returned"""
         self.assertEqual(0, len(reset_route()) )
@@ -116,16 +105,6 @@ class TestDriver(unittest.TestCase):
         route = reset_route()
         coord1 = GpsCoord(1, 2.00, 3.00)
         self.assertEqual([coord1], route + [coord1])
-
-
-    """
-    start_route() Tests
-    """
-
-
-    """
-    pause_route() Tests
-    """
 
 
 if __name__ == '__main__':
