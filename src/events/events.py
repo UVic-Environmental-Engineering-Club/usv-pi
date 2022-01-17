@@ -1,50 +1,36 @@
 """ Subscriber/Observer programming paradigm """
 
-import functools
-from multiprocessing import Manager, Pool
-from multiprocessing.context import Process
-from typing import Dict, List, Any, Tuple
+import asyncio
+from typing import Any
 from collections.abc import Callable
+from src.constants import EVENT_LIST, SUBSCRIBERS
 from src.events.event_type import EventType
 
 
 def subscribe(
-    manager: Manager,
-    subscribers: Dict[EventType, List[Callable[[Any], Any]]],
     event: EventType,
     func: Callable[[Any], Any],
 ) -> None:
     """Adds an EventType and observer function to subscribers"""
-    if not event in subscribers:
-        subscribers[event] = manager.list()
-    subscribers[event].append(func)
+    if not event in SUBSCRIBERS:
+        SUBSCRIBERS[event] = []
+    SUBSCRIBERS[event].append(func)
 
 
-def post_event(
-    event_list: List[Tuple[EventType, Any]], event: EventType, data: Any
-) -> None:
+async def post_event(event: EventType, data: Any = None) -> None:
     """Runs all observer functions for the EventType"""
-    event_list.append((event, data))
-    print(event_list)
+    await EVENT_LIST.put((event, data))
 
 
-def smap(func) -> Callable[[Any], Any]:
-    """Helper function that returns function thats passed in"""
-    return func()
-
-
-def run_event_loop(
-    subscribers: Dict[EventType, List[Callable[[Any], Any]]],
-    event_list: List[Tuple[EventType, Any]],
-) -> None:
+async def run_event_loop() -> None:
     """Infinite loop for running event loop"""
     while True:
-        if len(event_list) != 0:
-            functions: List[Process] = []
+        await asyncio.sleep(0)
+        if not EVENT_LIST.empty():
+            [event_type, data] = await EVENT_LIST.get()
 
-            [event_type, data] = event_list.pop()
-            for func in subscribers[event_type]:
-                functions.append(functools.partial(func, data))
+            coroutines = []
+            for func in SUBSCRIBERS[event_type]:
+                coroutines.append(asyncio.create_task(func(data) if data else func()))
 
-            with Pool(processes=10) as pool:
-                pool.map(smap, functions)
+            await asyncio.gather(*coroutines)

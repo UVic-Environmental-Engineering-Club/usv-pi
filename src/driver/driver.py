@@ -1,16 +1,15 @@
 """ Functions that drive the boat """
 
-import time
-from typing import List, Tuple, Any
-from src.events.event_type import EventType
+import asyncio
+from typing import List
 from src.data_classes.sensor.data_in import GpsCoord
 
 
-def driver_loop(event_list: List[Tuple[EventType, Any]]):
+async def driver_loop():
     """Driver process logic lives in here"""
     while True:
         print("driver process!")
-        time.sleep(2)
+        await asyncio.sleep(2)
 
 
 def add_gps_coord(route: List[GpsCoord], coord: GpsCoord) -> List[GpsCoord]:

@@ -8,19 +8,18 @@ from src.data_classes.sensor.data_in import SensorIn
 from src.data_classes.sensor.data_out import SensorOut
 
 
-def handle_serial_in(data: SensorIn):
+async def handle_serial_in(data: SensorIn):
     """Handles serial data in events"""
+    print("serial in")
     pass
 
 
-def handle_serial_out(data: SensorOut):
+async def handle_serial_out(data: SensorOut):
     """Handles serial data out events"""
     pass
 
 
-def setup_serial_handlers(
-    manager: Manager, subscribers: Dict[EventType, List[Callable[[Any], Any]]]
-):
+def setup_serial_handlers():
     """Setup serial handlers for EventTypes"""
-    subscribe(manager, subscribers, EventType.SERIAL_IN, handle_serial_in)
-    subscribe(manager, subscribers, EventType.SERIAL_OUT, handle_serial_out)
+    subscribe(EventType.SERIAL_IN_GPS, handle_serial_in)
+    subscribe(EventType.SERIAL_OUT, handle_serial_out)
