@@ -1,5 +1,4 @@
 """ Main loop that is run on the Raspberry Pi on the USV 🛳⚓️ """
-import configparser
 from typing import List, Optional, Dict, Callable, Any, Tuple
 from multiprocessing import Process, Manager
 from serial import Serial
