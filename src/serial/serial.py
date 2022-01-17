@@ -6,7 +6,7 @@ from typing import List, Tuple, Any
 from src.events.event_type import EventType
 import json
 
-def serial_loop(event_list: List[Tuple[EventType, Any]], serial : Serial):
+def serial_loop(event_list: List[Tuple[EventType, Any]]):
     """Serial loop with two threads, one for reading, one for writing"""
     """https://stackoverflow.com/questions/39127158/small-example-for-pyserial-using-threading"""
 
