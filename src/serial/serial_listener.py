@@ -16,6 +16,7 @@ async def handle_serial_in(data: SensorIn):
 
 async def handle_serial_out(data: SensorOut):
     """Handles serial data out events"""
+    print("send data here", data)
     pass
 
 
