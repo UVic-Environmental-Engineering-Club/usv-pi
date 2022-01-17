@@ -14,7 +14,6 @@ import json
 
 
 route: List[GpsCoord] = []
-serial: Optional[Serial] = None
 paused_gps_coord: Optional[GpsCoord] = None
 processes: Dict[str, Process] = {}
 
@@ -28,7 +27,7 @@ def run():
         setup_serial_handlers(manager, subscribers)
         setup_socketio_handlers(manager, subscribers)
         processes["driver"] = Process(target=driver_loop, args=(event_list,))
-        processes["serial"] = Process(target=serial_loop,  args=(event_list, serial))
+        processes["serial"] = Process(target=serial_loop,  args=(event_list))
         processes["event_loop"] = Process(target=run_event_loop, args=(subscribers, event_list))
 
         for _, process in processes.items():
