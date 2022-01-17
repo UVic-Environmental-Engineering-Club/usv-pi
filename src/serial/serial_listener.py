@@ -1,7 +1,5 @@
 """ Handles serial events"""
 
-from multiprocessing import Manager
-from typing import Dict, Callable, Any, List
 from src.events.event_type import EventType
 from src.events.events import subscribe
 from src.data_classes.sensor.data_in import SensorIn

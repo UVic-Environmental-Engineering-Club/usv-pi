@@ -1,7 +1,5 @@
 """ Handles socketio events"""
 
-from multiprocessing import Manager
-from typing import Dict, Callable, Any, List
 from src.events.event_type import EventType
 from src.events.events import subscribe
 from src.data_classes.socketio.message import Message
