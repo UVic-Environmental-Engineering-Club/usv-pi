@@ -1,37 +1,40 @@
 """ Main loop that is run on the Raspberry Pi on the USV 🛳⚓️ """
-from typing import List, Optional, Dict, Callable, Any, Tuple
-from multiprocessing import Process, Manager
-from serial import Serial
+import asyncio
+from src.socketio.namespace import USVNameSpace
+from src.constants import SIO
+from src.events.event_type import EventType
 from src.serial.serial import serial_loop
 from src.driver.driver import driver_loop
-from src.events.events import run_event_loop
-from src.events.event_type import EventType
+from src.events.events import post_event, run_event_loop
 from src.database.database_listener import setup_database_handlers
 from src.serial.serial_listener import setup_serial_handlers
 from src.socketio.socketio_listener import setup_socketio_handlers
-from src.data_classes.sensor.data_in import GpsCoord
-import json
 
 
-route: List[GpsCoord] = []
-paused_gps_coord: Optional[GpsCoord] = None
-processes: Dict[str, Process] = {}
+async def test():
+    while True:
+        await asyncio.sleep(1)
+        await post_event(EventType.DATABASE_READ)
+        await post_event(EventType.SERIAL_IN_GPS, "hello")
 
 
-def run():
+async def run():
     """Used to start the loop in __main__"""
-    with Manager() as manager:
-        subscribers: Dict[EventType, List[Callable[[Any], Any]]] = manager.dict()
-        event_list: List[Tuple[EventType, Any]] = manager.list()
-        setup_database_handlers(manager, subscribers)
-        setup_serial_handlers(manager, subscribers)
-        setup_socketio_handlers(manager, subscribers)
-        processes["driver"] = Process(target=driver_loop, args=(event_list,))
-        processes["serial"] = Process(target=serial_loop,  args=(event_list))
-        processes["event_loop"] = Process(target=run_event_loop, args=(subscribers, event_list))
+    setup_database_handlers()
+    setup_serial_handlers()
+    setup_socketio_handlers()
 
-        for _, process in processes.items():
-            process.start()
+    SIO.register_namespace(USVNameSpace("/usv"))
+    try:
+        await SIO.connect("http://localhost:3000/")
+    except Exception as error:
+        print("Could not open socket.io connection.", error)
 
-        for _, process in processes.items():
-            process.join()
+    coroutines = []
+
+    coroutines.append(asyncio.create_task(driver_loop()))
+    coroutines.append(asyncio.create_task(serial_loop()))
+    coroutines.append(asyncio.create_task(run_event_loop()))
+    coroutines.append(asyncio.create_task(test()))
+
+    await asyncio.gather(*coroutines)
