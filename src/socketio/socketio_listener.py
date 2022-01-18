@@ -3,12 +3,12 @@
 from src.events.event_type import EventType
 from src.events.events import subscribe
 from src.data_classes.socketio.message import Message
-
+from src.events.events import post_event
 
 async def handle_socketio_in(message: Message):
     """Handles socketio data in events"""
     print("handle socket in message:", message)
-    pass
+    await post_event(EventType.SERIAL_OUT, message)
 
 
 async def handle_socketio_out(message: Message):
