@@ -1,0 +1,13 @@
+services:
+    mongodb:
+        image: mongo:latest
+        container_name: mongodb
+        hostname: mongodb
+        volumes:
+            - ./src/database/mongod.conf:/etc/mongod.conf
+            - ./src/database/initdb.d/:/docker-entrypoint-initdb.d/
+            - ./src/database/data/db/:/data/db/
+            - ./src/database/data/log/:/var/log/mongodb/
+        ports:
+            - 27017:27017
+        
