@@ -11,9 +11,5 @@ class EventType(Enum):
     DATABASE_WRITE = auto()
     DATABASE_READ = auto()
 
-    SERIAL_IN_MAGNETOMETER = auto()
-    SERIAL_IN_GPS = auto()
-    SERIAL_IN_ACCELEROMETER = auto()
-    SERIAL_IN_BATTERY = auto()
-
+    SERIAL_IN = auto()
     SERIAL_OUT = auto()

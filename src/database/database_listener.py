@@ -6,10 +6,10 @@ from src.events.event_type import EventType
 from src.events.events import subscribe
 
 
-async def handle_database_write():
+async def handle_database_write(data : str):
     """Handles database write events"""
-    print("data write")
-    pass
+    print("data write " + data)
+    
 
 
 async def handle_database_read():
