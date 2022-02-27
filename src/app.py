@@ -15,7 +15,7 @@ async def test():
     while True:
         await asyncio.sleep(1)
         await post_event(EventType.DATABASE_READ)
-        await post_event(EventType.SERIAL_IN_GPS, "hello")
+        await post_event(EventType.SERIAL_IN, "hello")
         await post_event(EventType.SERIAL_OUT, "mr100")
         await post_event(EventType.SERIAL_OUT, "ml050")
 
