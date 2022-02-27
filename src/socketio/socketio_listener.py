@@ -4,7 +4,7 @@ from src.events.event_type import EventType
 from src.events.events import subscribe
 from src.events.events import post_event
 from src.constants import SIO
-
+from src.data_classes.socketio.message import Message
 
 async def handle_serial_in(message: str):
     """Handles socketio data in events"""
@@ -14,8 +14,7 @@ async def handle_serial_in(message: str):
     
     #send to database
     await post_event(EventType.DATABASE_WRITE, message)
-    
-    
+
 
 
 async def handle_socketio_out(message: str):

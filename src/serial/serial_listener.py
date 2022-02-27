@@ -9,6 +9,7 @@ from src.constants import SERIAL
 from src.events.events import post_event
 
 
+
 async def handle_serial_out(data: SensorIn):
     """Handles serial data in events"""
     
