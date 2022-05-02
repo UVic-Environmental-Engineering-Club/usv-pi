@@ -1,15 +1,17 @@
 """ Handles database events"""
 
-from multiprocessing import Manager
-from typing import Dict, Callable, Any, List
+from typing import Dict
+from arrow import utcnow
+from src.constants import SENSOR_DATA_COLLECTION
 from src.events.event_type import EventType
 from src.events.events import subscribe
 
 
-async def handle_database_write(data : str):
+async def handle_database_write(data: Dict[str, any]):
     """Handles database write events"""
-    print("data write " + data)
-    
+    SENSOR_DATA_COLLECTION.insert_one(
+        {"timestamp": utcnow().datetime, "type": data["type"], "data": data["data"]}
+    )
 
 
 async def handle_database_read():
