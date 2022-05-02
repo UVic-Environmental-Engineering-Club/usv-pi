@@ -9,6 +9,7 @@ black = "*"
 pylint = "*"
 pyserial = "*"
 python-socketio = {extras = ["asyncio_client"], version = "*"}
+pymongo = "*"
 
 [dev-packages]
 
