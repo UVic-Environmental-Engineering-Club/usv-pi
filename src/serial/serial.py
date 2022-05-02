@@ -8,7 +8,6 @@ async def serial_loop():
     """https://stackoverflow.com/questions/39127158/small-example-for-pyserial-using-threading"""
 
     while True:
-        print("serial process!")
         await asyncio.sleep(2)
         if not SERIAL:
             print("Serial not initialized")

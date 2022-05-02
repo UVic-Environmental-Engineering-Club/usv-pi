@@ -1,8 +1,8 @@
 {
+  "port": "/dev/cu.usbserial-0001",
+  "baudrate": 9600,
+  "bytesize": 8,
+  "timeout": 0.5,
 
-    "port" : "/dev/cu.usbserial-0001",
-    "baudrate" : 9600,
-    "bytesize" : 8,
-    "timeout" : 0.5
-
+  "mongo_url": "mongodb://localhost:27017/"
 }

@@ -14,5 +14,5 @@ class SensorIn:
 class GpsCoord(SensorIn):
     """Dataclass for gps data"""
 
-    longitude: float
-    latitude: float
+    long: float
+    lat: float

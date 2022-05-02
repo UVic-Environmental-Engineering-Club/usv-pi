@@ -15,7 +15,7 @@ async def test():
     while True:
         await asyncio.sleep(1)
         await post_event(EventType.DATABASE_READ)
-        await post_event(EventType.SERIAL_IN, "hello")
+        await post_event(EventType.SERIAL_IN, "ACC-000-324-234")
         await post_event(EventType.SERIAL_OUT, "mr100")
         await post_event(EventType.SERIAL_OUT, "ml050")
 
@@ -27,8 +27,9 @@ async def run():
     setup_socketio_handlers()
 
     SIO.register_namespace(USVNameSpace("/usv"))
+
     try:
-        await SIO.connect("http://localhost:3000/")
+        await SIO.connect("http://localhost:8080/")
     except Exception as error:
         print("Could not open socket.io connection.", error)
 
