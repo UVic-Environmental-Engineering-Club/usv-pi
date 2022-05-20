@@ -25,7 +25,7 @@ async def post_event(event: EventType, data: Any = None) -> None:
 async def run_event_loop() -> None:
     """Infinite loop for running event loop"""
     while True:
-        await asyncio.sleep(0)
+        await asyncio.sleep(0.01)
         if not EVENT_LIST.empty():
             [event_type, data] = await EVENT_LIST.get()
 

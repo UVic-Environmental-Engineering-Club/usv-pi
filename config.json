@@ -1,8 +1,11 @@
 {
+  "env": "dev",
   "port": "/dev/cu.usbserial-0001",
   "baudrate": 9600,
   "bytesize": 8,
   "timeout": 0.5,
 
-  "mongo_url": "mongodb://localhost:27017/"
+  "mongo_url_prod": "mongodb://localhost:27017/",
+  "mongo_url_dev": "mongodb+srv://uveec:<password>@cluster0.tewjo.mongodb.net/sensors",
+  "mongo_dev_password": ""
 }

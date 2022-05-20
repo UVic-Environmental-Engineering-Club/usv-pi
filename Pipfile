@@ -10,6 +10,7 @@ pylint = "*"
 pyserial = "*"
 python-socketio = {extras = ["asyncio_client"], version = "*"}
 pymongo = "*"
+dnspython = "*"
 
 [dev-packages]
 

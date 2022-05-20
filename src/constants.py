@@ -15,6 +15,8 @@ MONGO_CLIENT: Optional[MongoClient] = None
 
 with open(file="config.json", mode="r", encoding="utf-8") as file:
     config = json.load(file)
+    env = config["env"]
+
     try:
         SERIAL = Serial(config["port"], config["baudrate"], timeout=config["timeout"])
     except Exception as error:
@@ -22,7 +24,15 @@ with open(file="config.json", mode="r", encoding="utf-8") as file:
         SERIAL = None
 
     try:
-        MONGO_CLIENT = MongoClient(config["mongo_url"])
+        if env == "dev":
+            MONGO_CLIENT = MongoClient(
+                config["mongo_url_dev"].replace(
+                    "<password>", config["mongo_dev_password"]
+                )
+            )
+        else:
+            MONGO_CLIENT = MongoClient(config["mongo_url_prod"])
+
     except Exception as error:
         print("Could not open database.", error)
         MONGO_CLIENT = None
