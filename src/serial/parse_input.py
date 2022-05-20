@@ -20,3 +20,4 @@ def parse_string(message: str) -> str:
     
 
     return {"type": type, "data": split_message}
+    
