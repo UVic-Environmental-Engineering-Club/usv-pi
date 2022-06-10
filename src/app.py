@@ -15,7 +15,6 @@ async def test():
     while True:
         await asyncio.sleep(1)
         await post_event(EventType.DATABASE_READ)
-        # await post_event(EventType.SERIAL_IN, "ACC-000-324-234")
         await post_event(EventType.SERIAL_OUT, "mr100")
         await post_event(EventType.SERIAL_OUT, "ml050")
 
