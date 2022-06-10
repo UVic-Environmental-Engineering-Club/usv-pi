@@ -37,8 +37,7 @@ with open(file="config.json", mode="r", encoding="utf-8") as file:
         print("Could not open database.", error)
         MONGO_CLIENT = None
 
-ROUTE: List[GpsCoord] = []
-SHORE: List[GpsCoord] = []
+DATA: Dict[str, List[GpsCoord]] = {"route": [], "shore": []}
 SUBSCRIBERS: Dict[EventType, List[Callable[[Any], Any]]] = {}
 EVENT_LIST: asyncio.Queue[Tuple[EventType, Any]] = asyncio.Queue()
 

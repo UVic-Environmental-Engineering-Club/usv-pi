@@ -1,4 +1,5 @@
-from src.constants import ROUTE
+from dataclasses import dataclass
+from src.constants import DATA
 import socketio
 
 
@@ -11,15 +12,9 @@ class USVNameSpace(socketio.AsyncClientNamespace):
         print("disconnected")
         pass
 
-    async def on_init_route(self, data):
-        print("init route", data)
-        ROUTE = data
+    async def on_update_route_ack(self, data):
+        DATA["route"] = data
 
-    async def on_add_point_ack(self, data):
-        print(data)
+    async def on_update_shore_ack(self, data):
+        DATA["shore"] = data
 
-    async def on_delete_point_ack(self, data):
-        print(data)
-
-    async def on_clear_route_ack(self, data):
-        print(data)
