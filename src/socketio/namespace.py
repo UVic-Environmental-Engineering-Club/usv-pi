@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from src.constants import DATA
 import socketio
 
@@ -17,4 +16,3 @@ class USVNameSpace(socketio.AsyncClientNamespace):
 
     async def on_update_shore_ack(self, data):
         DATA["shore"] = data
-
