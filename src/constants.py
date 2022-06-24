@@ -1,5 +1,6 @@
 import asyncio
 import json
+from enum import Enum, auto
 
 from pymongo import MongoClient
 import socketio
@@ -45,3 +46,12 @@ SIO = socketio.AsyncClient()
 
 USV_DB = MONGO_CLIENT.usv
 SENSOR_DATA_COLLECTION = USV_DB.sensor_data
+
+class State(Enum):
+    STOP = auto()
+    DRIVE = auto()
+    COLLISION_DETECTION = auto()
+    SHORE_DETECTION = auto()
+    EMERGENCY = auto()
+    ADJUST_RUDDERS = auto()
+    GO_TO_POINT = auto()
