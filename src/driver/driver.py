@@ -1,9 +1,17 @@
 """ Functions that drive the boat """
 
 import asyncio
+import arrow
 from typing import List
 from src.data_classes.sensor.data_in import GpsCoord
 
+#set up iterations to adjust rudders
+nextIteration = now().replace(second = 0, microsecond = 0).shift(seconds=10)
+
+#adjust rudder loop
+while True:
+    if now() < nextIteration:
+        
 
 async def driver_loop():
     """Driver process logic lives in here"""
