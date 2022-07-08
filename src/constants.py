@@ -45,7 +45,8 @@ EVENT_LIST: asyncio.Queue[Tuple[EventType, Any]] = asyncio.Queue()
 SIO = socketio.AsyncClient()
 
 USV_DB = MONGO_CLIENT.usv
-SENSOR_DATA_COLLECTION = USV_DB.sensor_data
+GPS_DATA_COLLECTION = USV_DB.gps_data
+
 
 class State(Enum):
     STOP = auto()
