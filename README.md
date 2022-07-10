@@ -4,6 +4,10 @@ This is the software that is going to run inside the Raspberry Pi on the unmanne
 
 [Project Structure for USV](https://github.com/UVic-Environmental-Engineering-Club/USV-Pi/wiki/Project-Structure)
 
+## Adding to config.json
+
+`git update-index --assume-unchanged config.json`
+
 ## Docker
 
 - To build the docker image
