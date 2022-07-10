@@ -29,6 +29,7 @@ async def driver_loop():
 
 
 def boundary_calc(point_a: GpsCoord, point_b: GpsCoord) -> tuple[GpsCoord, GpsCoord]:
+    """Calculate the boundary"""
     c = GpsCoord(arrow.now(), 0, 0)
     d = GpsCoord(arrow.now(), 0, 0)
 
