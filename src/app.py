@@ -14,7 +14,6 @@ from src.socketio.socketio_listener import setup_socketio_handlers
 async def test():
     while True:
         await asyncio.sleep(1)
-        await post_event(EventType.DATABASE_READ)
         await post_event(EventType.SERIAL_OUT, "mr100")
         await post_event(EventType.SERIAL_OUT, "ml050")
 
@@ -37,6 +36,6 @@ async def run():
     coroutines.append(asyncio.create_task(driver_loop()))
     coroutines.append(asyncio.create_task(serial_loop()))
     coroutines.append(asyncio.create_task(run_event_loop()))
-    coroutines.append(asyncio.create_task(test()))
+    # coroutines.append(asyncio.create_task(test()))
 
     await asyncio.gather(*coroutines)

@@ -44,8 +44,55 @@ EVENT_LIST: asyncio.Queue[Tuple[EventType, Any]] = asyncio.Queue()
 
 SIO = socketio.AsyncClient()
 
+SENSOR_NAMES = (
+    "ACC",
+    "GYR",
+    "MAG",
+    "LID",
+    "BAT",
+    "RPM",
+    "TMP",
+    "WET",
+    "GPS",
+    "GPSSTAT",
+)
+
+DATABASE_NAMES = (
+    "accelerometer_data",
+    "gyroscope_data",
+    "magnetometer_data",
+    "lidar_data",
+    "battery_data",
+    "rpm_data",
+    "temperature_data",
+    "wet_data",
+    "gps_data",
+    "gps_stats_data",
+)
+
 USV_DB = MONGO_CLIENT.usv
-GPS_DATA_COLLECTION = USV_DB.gps_data
+for database_name in DATABASE_NAMES:
+    if database_name not in USV_DB.list_collection_names():
+        USV_DB.command(
+            "create",
+            database_name,
+            timeseries={
+                "timeField": "timestamp",
+                "metaField": "data",
+                "granularity": "seconds",
+            },
+        )
+
+ACC_COLLECTION = USV_DB.accelerometer_data
+GYR_COLLECTION = USV_DB.gyroscope_data
+MAG_COLLECTION = USV_DB.magnetometer_data
+LID_COLLECTION = USV_DB.lidar_data
+BAT_COLLECTION = USV_DB.battery_data
+RPM_COLLECTION = USV_DB.rpm_data
+TMP_COLLECTION = USV_DB.temperature_data
+WET_COLLECTION = USV_DB.wet_data
+GPS_COLLECTION = USV_DB.gps_data
+GPSSTAT_COLLECTION = USV_DB.gps_stats_data
 
 
 class State(Enum):
