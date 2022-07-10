@@ -5,7 +5,6 @@ import arrow
 from typing import List
 from src.constants import GPS_DATA_COLLECTION
 from src.data_classes.sensor.data_in import GpsCoord
-from pymongo import MongoClient
 
        
 
@@ -20,7 +19,7 @@ async def driver_loop():
         nextIteration = arrow.now().replace(second = 0, microsecond = 0).shift(seconds=10)
 
         #Get most recent gps coordinate from database
-        currentPoint = GPS_DATA_COLLECTION.find().limit(1).sort({natural:-1})
+        currentPoint = GPS_DATA_COLLECTION.find().limit(1).sort({'$natural':-1})
 
 
 
