@@ -2,14 +2,14 @@
 
 from typing import Dict
 from arrow import utcnow
-from src.constants import SENSOR_DATA_COLLECTION
+from src.constants import GPS_DATA_COLLECTION
 from src.events.event_type import EventType
 from src.events.events import subscribe
 
 
 async def handle_database_write(data: Dict[str, any]):
     """Handles database write events"""
-    SENSOR_DATA_COLLECTION.insert_one(
+    GPS_DATA_COLLECTION.insert_one(
         {"timestamp": utcnow().datetime, "type": data["type"], "data": data["data"]}
     )
 

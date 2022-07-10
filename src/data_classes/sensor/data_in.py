@@ -2,12 +2,14 @@
 
 from dataclasses import dataclass
 
+from arrow import Arrow
+
 
 @dataclass
 class SensorIn:
     """Base SensorIn"""
 
-    timestamp: int
+    timestamp: Arrow
 
 
 @dataclass
