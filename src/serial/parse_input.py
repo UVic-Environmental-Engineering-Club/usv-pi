@@ -1,35 +1,34 @@
 import json
-
-ACC_GYR_Value = {'x': -1, 'y': -1, 'z': -1}
-LID_Value = {'left': -1, 'middle': -1, 'right': -1}
-COM_BAT_Value = {'x': -1}
-RPM_TMP_WET_GPS_Value = {'x': -1, 'y': -1}
-
-Arrays = [['x', 'y', 'z'], ['left', 'middle', 'right']]
-
-def dataUpdater(value, myJson, splitMessage, array, size):
-    myData = value
-    i = 1
-    while i < size:
-        value = splitMessage[i]
-        myData[array[i - 1]] = value
-        i = i + 1
-    myJson["data"] = myData
+from typing import Dict
 
 
-def parse_string(message: str) -> str:
+def parse_string(message: str) -> Dict[str, float]:
     if message is not None:
-        splitMessage = message.split("-")
-        myType = splitMessage[0]
-        myJson = {"type": myType, "data": None}
+        split_message = message.split(":")
+        message_type = split_message[0]
+        parsed_message = {"type": message_type, "data": {}}
 
-        if myType in ("ACC", "GYR"):
-            dataUpdater(ACC_GYR_Value, myJson, splitMessage, Arrays[0], len(splitMessage))
-        elif "LID" in splitMessage:
-            dataUpdater(LID_Value, myJson, splitMessage, Arrays[1], len(splitMessage))
-        elif myType in ("COM", "BAT"):
-            dataUpdater(COM_BAT_Value, myJson, splitMessage, Arrays[0], 2)
-        elif myType in ("RPM", "TMP", "WET", "GPS"):
-            dataUpdater(RPM_TMP_WET_GPS_Value, myJson, splitMessage, Arrays[0], 3)
-        return str(json.dumps(myJson, indent=4))
-    return ""
+        if message_type in ("ACC", "GYR"):
+            parsed_message["data"] = {
+                "x": split_message[1],
+                "y": split_message[2],
+                "z": split_message[3],
+            }
+        elif "LID" in split_message:
+            parsed_message["data"] = {
+                "left": split_message[1],
+                "middle": split_message[2],
+                "right": split_message[3],
+            }
+        elif message_type in ("COM", "BAT"):
+            parsed_message["data"] = {
+                "x": split_message[1],
+            }
+        elif message_type in ("RPM", "TMP", "WET", "GPS"):
+            parsed_message["data"] = {"x": split_message[1], "y": split_message[2]}
+        elif message_type in ("GPS"):
+            parsed_message["data"] = {"long": split_message[1], "lat": split_message[2]}
+
+        return str(json.dumps(parsed_message, indent=4))
+
+    return {}
