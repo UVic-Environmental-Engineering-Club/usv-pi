@@ -5,26 +5,23 @@ import arrow
 from typing import List
 from src.constants import GPS_DATA_COLLECTION
 from src.data_classes.sensor.data_in import GpsCoord
-from pymongo import MongoCient
+from pymongo import MongoClient
 
+       
 
-#set up iterations to adjust rudders
-nextIteration = now().replace(second = 0, microsecond = 0).shift(seconds=10)
+async def driver_loop():
+    #adjust rudder loop
+    nextIteration = arrow.now().replace(second = 0, microsecond = 0).shift(seconds=10)
+    while True:
+        if arrow.now() < nextIteration:
+            await asyncio.sleep(0.001)
+            continue
 
-#adjust rudder loop
-while True:
-    if arrow.now() < nextIteration:
+        nextIteration = arrow.now().replace(second = 0, microsecond = 0).shift(seconds=10)
+
         #Get most recent gps coordinate from database
         currentPoint = GPS_DATA_COLLECTION.find().limit(1).sort({natural:-1})
 
-
-        
-
-async def driver_loop():
-    """Driver process logic lives in here"""
-    while True:
-        print("driver process!")
-        await asyncio.sleep(2)
 
 
 def add_gps_coord(route: List[GpsCoord], coord: GpsCoord) -> List[GpsCoord]:
