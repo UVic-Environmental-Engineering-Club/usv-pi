@@ -9,17 +9,18 @@ from src.data_classes.sensor.data_in import GpsCoord
        
 
 async def driver_loop():
+    """ Driving Loop """
     #adjust rudder loop
-    nextIteration = arrow.now().replace(second = 0, microsecond = 0).shift(seconds=10)
+    next_iteration = arrow.now().replace(second = 0, microsecond = 0).shift(seconds=10)
     while True:
-        if arrow.now() < nextIteration:
+        if arrow.now() < next_iteration:
             await asyncio.sleep(0.001)
             continue
 
-        nextIteration = arrow.now().replace(second = 0, microsecond = 0).shift(seconds=10)
+        next_iteration = arrow.now().replace(second = 0, microsecond = 0).shift(seconds=10)
 
         #Get most recent gps coordinate from database
-        currentPoint = GPS_DATA_COLLECTION.find().limit(1).sort({'$natural':-1})
+        current_location = GPS_DATA_COLLECTION.find().limit(1).sort({'$natural': -1})
 
 
 
