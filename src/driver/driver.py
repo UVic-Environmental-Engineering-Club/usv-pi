@@ -6,7 +6,7 @@ from xmlrpc.client import boolean
 import arrow
 
 from src.data_classes.sensor.data_in import GpsCoord
-from src.constants import DATA, GPS_DATA_COLLECTION
+from src.constants import DATA, GPS_COLLECTION
 
 
 async def driver_loop(iteration_time: int = 10):
@@ -15,12 +15,7 @@ async def driver_loop(iteration_time: int = 10):
     next_iteration = arrow.now().shift(seconds=iteration_time)
 
     current_point = DATA["route"].pop(0)
-    db_usv_point = GPS_DATA_COLLECTION.find_one()
-    usv_point = GpsCoord(arrow.now(), db_usv_point["long"], db_usv_point["lat"])
-    print(boundary_calc(usv_point, current_point))
-    next_iteration = arrow.now().replace(second=0, microsecond=0).shift(seconds=10)
-    current_point = DATA["route"].pop(0)
-    db_usv_point = GPS_DATA_COLLECTION.find_one()
+    db_usv_point = GPS_COLLECTION.find_one()
     usv_point = GpsCoord(arrow.now(), db_usv_point["long"], db_usv_point["lat"])
 
     while True:
@@ -29,28 +24,27 @@ async def driver_loop(iteration_time: int = 10):
             continue
 
         next_iteration = arrow.now().shift(seconds=iteration_time)
-        next_iteration = arrow.now().replace(second=0, microsecond=0).shift(seconds=10)
 
         # Get most recent gps coordinate from database
-        current_location = GPS_DATA_COLLECTION.find().limit(1).sort({"$natural": -1})
+        current_location = GPS_COLLECTION.find().limit(1).sort({"$natural": -1})
 
 
-def boundary_calc(point_a: GpsCoord, point_b: GpsCoord) -> tuple[GpsCoord, GpsCoord]:
+def boundary_calc(pt_a: GpsCoord, pt_b: GpsCoord) -> tuple[GpsCoord, GpsCoord]:
     """Calculate the boundary"""
-    c = GpsCoord(arrow.now(), 0, 0)
-    d = GpsCoord(arrow.now(), 0, 0)
+    pt_c = GpsCoord(arrow.now(), 0, 0)
+    pt_d = GpsCoord(arrow.now(), 0, 0)
 
-    slope = (point_b.long - point_a.long) / (point_b.lat - point_a.lat)
+    slope = (pt_b.long - pt_a.long) / (pt_b.lat - pt_a.lat)
 
     dy = math.sqrt(3**2 / (slope**2 + 1))
     dx = -slope * dy
 
-    c.lat = point_b.lat + dx
-    c.long = point_b.long + dy
-    d.lat = point_b.lat - dx
-    d.long = point_b.long - dy
+    pt_c.lat = pt_b.lat + dx
+    pt_c.long = pt_b.long + dy
+    pt_d.lat = pt_b.lat - dx
+    pt_d.long = pt_b.long - dy
 
-    return (c, d)
+    return (pt_c, pt_d)
 
 
 def bound_detect(
