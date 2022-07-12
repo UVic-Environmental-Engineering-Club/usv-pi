@@ -1,7 +1,7 @@
 {
   "env": "dev",
   "port": "/dev/cu.usbserial-0001",
-  "baudrate": 9600,
+  "baudrate": 115200,
   "bytesize": 8,
   "timeout": 0.5,
 

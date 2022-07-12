@@ -10,8 +10,10 @@ from src.serial.parse_input import parse_string
 
 async def handle_serial_in(message: str):
     """Handles socketio data in events"""
-
     parsed_serial_message = parse_string(message)
+
+    if not parsed_serial_message:
+        return
 
     # send to socket
     await post_event(EventType.SOCKET_OUT, parsed_serial_message)
