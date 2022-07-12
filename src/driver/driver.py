@@ -6,7 +6,22 @@ from xmlrpc.client import boolean
 import arrow
 
 from src.data_classes.sensor.data_in import GpsCoord
-from src.constants import DATA, GPS_COLLECTION
+from src.constants import DATA, GPS_COLLECTION, State
+
+
+def turn_left():
+    print("turn left")
+    return
+
+
+def turn_right():
+    print("turn right")
+    return
+
+
+def forward():
+    print("going forward")
+    return
 
 
 async def driver_loop(iteration_time: int = 10):
@@ -20,13 +35,13 @@ async def driver_loop(iteration_time: int = 10):
 
     while True:
         await asyncio.sleep(0.5)
-        if arrow.now() < next_iteration:
+        if arrow.now() < next_iteration or DATA["state"] == State.COLLISION_DETECTION:
             continue
 
         next_iteration = arrow.now().shift(seconds=iteration_time)
 
         # Get most recent gps coordinate from database
-        current_location = GPS_COLLECTION.find().limit(1).sort({"$natural": -1})
+        current_location = GPS_COLLECTION.find_one(sort=[("timestamp", -1)])
 
 
 def boundary_calc(pt_a: GpsCoord, pt_b: GpsCoord) -> tuple[GpsCoord, GpsCoord]:
