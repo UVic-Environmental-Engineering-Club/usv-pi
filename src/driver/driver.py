@@ -65,7 +65,7 @@ def boundary_calc(pt_a: GpsCoord, pt_b: GpsCoord) -> tuple[GpsCoord, GpsCoord]:
 def bound_detect(
     pt_p: GpsCoord, pt_a: GpsCoord, pt_b: GpsCoord, pt_c: GpsCoord
 ) -> boolean:
-    """Using barycentric method to check wether a point is withing the bounds of a 2D triangle
+    """Using barycentric method to check wether a point is within the bounds of a 2D triangle
     -> https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/barycentric-coordinates#:~:text=Barycentric%20coordinates%20can%20be%20used%20to%20express%20the%20position%20of,the%20three%20triangle's%20vertices%20themselves.
     -> https://en.wikipedia.org/wiki/Barycentric_coordinate_system"""
     areal_coord_u = (pt_a.lat - pt_c.lat) * (pt_p.long - pt_c.long) - (
