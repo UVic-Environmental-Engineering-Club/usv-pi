@@ -90,4 +90,9 @@ async def collision_detection_loop():
 
 
 def locate_shore() -> ShoreDirection:
-    return ShoreDirection.LEFT
+    left, right = get_lid_data()
+
+    if left > right:
+        return ShoreDirection.LEFT
+    else:
+        return ShoreDirection.RIGHT
