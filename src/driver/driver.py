@@ -4,6 +4,7 @@ import math
 import asyncio
 from xmlrpc.client import boolean
 import arrow
+import utm
 
 from src.data_classes.sensor.data_in import GpsCoord
 from src.constants import DATA, GPS_COLLECTION, State
@@ -88,3 +89,8 @@ def bound_detect(
     return areal_coord_w == 0 or (areal_coord_w < 0) == (
         areal_coord_u + areal_coord_v <= 0
     )
+
+
+def geographic_to_UTM(point: GpsCoord) -> tuple[float, float, float]:
+    """Converts a point from geographic coordinates to UTM coordinates"""
+    return utm.from_latlon(point.lat, point.long)
