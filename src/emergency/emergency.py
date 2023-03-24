@@ -1,10 +1,11 @@
+from typing import Tuple
 from src.constants import WET_COLLECTION, TMP_COLLECTION, BAT_COLLECTION
 
 
-def get_wet_data() -> tuple:
+def get_wet_data() -> Tuple[int, int]:
     """data is formatted is XY,
     where X is left, and Y is right
-    Units: % humidity?
+    Units: percentage
     """
     wet_doc = WET_COLLECTION.find_one(sort=[("timestamp", -1)])
     wet_data = wet_doc["data"]
@@ -15,7 +16,7 @@ def get_wet_data() -> tuple:
     return (left, right)
 
 
-def get_tmp_data() -> tuple:
+def get_tmp_data() -> Tuple[int, int]:
     """data is formatted is XY,
     where X is left, and Y is right
     Units: degree celsius
@@ -30,6 +31,10 @@ def get_tmp_data() -> tuple:
 
 
 def get_bat_data() -> int:
+    """data is formatted is XXX,
+    where X is left, and Y is right
+    Units: percentage
+    """
     bat_doc = BAT_COLLECTION.find_one(sort=[("timestep", -1)])
     bat_data = bat_doc["data"]
 
@@ -37,6 +42,7 @@ def get_bat_data() -> int:
 
 
 async def emergency_interrupt() -> bool:
-    # first, find threshold of each data
-    # then if curr data > threshold trigger interrupt
+    """first, find threshold of each data
+    then if curr data > threshold trigger interrupt"""
+
     return False
