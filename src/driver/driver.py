@@ -146,3 +146,10 @@ def get_distance(point_a: GpsCoord, point_b: GpsCoord) -> float:
     return math.sqrt(
         (point_a.lat - point_b.lat) ** 2 + (point_a.long - point_b.long) ** 2
     )
+
+
+def is_threshold(
+    current_location: GpsCoord, next_waypoint: GpsCoord, THRESHOLD: int
+) -> bool:
+    """Check if the current location is within the circumference of the next waypoint"""
+    return get_distance(current_location, next_waypoint) < THRESHOLD
