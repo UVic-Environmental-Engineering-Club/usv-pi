@@ -29,9 +29,9 @@ INPUT_KD = 0
 class Gains(Enum):
     """Gains for PID controller"""
 
-    K_P = INPUT_KP if (INPUT_KP is not None) else 1.5
-    K_I = INPUT_KI if (INPUT_KI is not None) else 0.5
-    K_D = INPUT_KD if (INPUT_KD is not None) else 0.5
+    K_P = INPUT_KP if INPUT_KP is not None else 1.5
+    K_I = INPUT_KI if INPUT_KI is not None else 0.5
+    K_D = INPUT_KD if INPUT_KD is not None else 0.5
 
 
 class State(Enum):
