@@ -14,7 +14,29 @@ SERIAL: Optional[Serial] = None
 MONGO_CLIENT: Optional[MongoClient] = None
 
 
+class Error(Enum):
+    """Error codes"""
+
+    CUMULATIVE = 0
+    PREVIOUS = 0
+
+
+INPUT_KP = 0
+INPUT_KI = 0
+INPUT_KD = 0
+
+
+class Gains(Enum):
+    """Gains for PID controller"""
+
+    K_P = INPUT_KP if (INPUT_KP is not None) else 1.5
+    K_I = INPUT_KI if (INPUT_KI is not None) else 0.5
+    K_D = INPUT_KD if (INPUT_KD is not None) else 0.5
+
+
 class State(Enum):
+    """States for the USV"""
+
     STOP = auto()
     DRIVE = auto()
     COLLISION_DETECTION = auto()
