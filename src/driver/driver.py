@@ -12,53 +12,64 @@ from src.data_classes.sensor.data_in import GpsCoord
 from src.constants import PORT, DATA, GPS_COLLECTION, State, Gains, Error
 
 
-def update_rudder_angle(old_angle: float, new_angle: float, delay_time: float) -> None:
-    """Updates the rudder angle"""
+def correct_rudder_angle(
+    boat_heading: float, next_waypoint: float, delay_time: float
+) -> None:
+    """Corrects the rudder angle"""
+    # Convert degrees to radians
+    boat_heading = math.radians(boat_heading)
+    next_waypoint = math.radians(next_waypoint)
 
-    # delay time is how to control the speed the servo will change angles
+    # Calculate the angle between the boat's heading and the next waypoint
+    angle_diff = next_waypoint - boat_heading
 
-    # make the servo change from old to new degrees in increments, not all at once
-    if new_angle > old_angle:
-        for signal in range(old_angle, new_angle + 1, 1):
-            # in steps of 1 degree
-            PORT.write(signal)
-            time.sleep(delay_time)
+    # Normalize the angle to be within -180 to 180 degrees
+    if angle_diff > math.pi:
+        angle_diff -= 2 * math.pi
+    elif angle_diff < -math.pi:
+        angle_diff += 2 * math.pi
 
-    if new_angle < old_angle:
-        for signal in range(old_angle, new_angle - 1, -1):
-            # in steps of 1 degree
-            PORT.write(signal)
-            time.sleep(delay_time)
+    # Calculate the rudder angle to correct the course
+    rudder_angle = math.degrees(
+        math.atan2(2 * math.sin(angle_diff), 1 + math.cos(angle_diff))
+    )
+    PORT.write(rudder_angle)
+    time.sleep(delay_time)
 
 
-def update_motor_power(old_power: float, new_power: float, delay_time: float) -> None:
-    """Updates the motor speed"""
+def correct_motor_power(
+    distance: float, current_speed: float, delay_time: float
+) -> None:
+    """Corrects the motor power"""
+    # Calculate the target speed based on the distance to the next waypoint
+    target_speed = max(
+        0, min(1, (distance / 100))
+    )  # assuming a maximum distance of 100 meters
 
-    # delay time is how to control the speed the motor will change power
+    # Calculate the difference between the current speed and the target speed
+    speed_diff = target_speed - current_speed
 
-    # make the motor change from old to new power in increments, not all at once
-    if new_power > old_power:
-        for signal in range(old_power, new_power + 1, 1):
-            # in steps of 1 perent
-            PORT.write(signal)
-            time.sleep(delay_time)
-
-    if new_power < old_power:
-        for signal in range(old_power, new_power - 1, -1):
-            # in steps of 1 percent
-            PORT.write(signal)
-            time.sleep(delay_time)
+    # Calculate the motor power adjustment
+    motor_power = max(
+        -1, min(1, speed_diff * 2)
+    )  # assuming maximum power range of -1 to 1
+    PORT.write(motor_power)
+    time.sleep(delay_time)
 
 
 async def driver_loop(iteration_time: int = 10):
     """Driver process logic lives in here"""
     # adjust rudder loop
     delay_time = 0.0005
+
     next_iteration = arrow.now().shift(seconds=iteration_time)
 
     current_point = DATA["route"].pop(0)
     db_usv_point = GPS_COLLECTION.find_one()
     usv_point = GpsCoord(arrow.now(), db_usv_point["long"], db_usv_point["lat"])
+    correct_rudder_angle(
+        get_heading(usv_point, current_point), current_point, delay_time
+    )
 
     while True:
         await asyncio.sleep(0.5)
@@ -133,32 +144,3 @@ def is_threshold(
 ) -> bool:
     """Check if the current location is within the circumference of the next waypoint"""
     return get_distance(current_location, next_waypoint) < THRESHOLD
-
-
-def pid(
-    val: float,
-    set_point: float,
-    upper_lim: float,
-    lower_lim: float,
-) -> float:
-    """PID controller"""
-    error = set_point - val
-
-    p_value = error * Gains.K_P.value
-    i_value = Error.CUMULATIVE.value * Gains.K_I.value
-    d_value = (error - Error.PREVIOUS.value) * Gains.K_D.value
-
-    pid_value = p_value + i_value + d_value
-
-    Error.CUMULATIVE.value += error
-    Error.PREVIOUS.value = error
-    val_range = upper_lim - lower_lim
-    new_val = map(pid_value, -1 * val_range, val_range, lower_lim, upper_lim)
-
-    if new_val > upper_lim:
-        new_val = upper_lim
-
-    if new_val < lower_lim:
-        new_val = lower_lim
-
-    return new_val
