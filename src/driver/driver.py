@@ -1,26 +1,59 @@
 """ Functions that drive the boat """
 
+import time
 import math
 import asyncio
 from xmlrpc.client import boolean
 import arrow
 import utm
 
+
 from src.data_classes.sensor.data_in import GpsCoord
-from src.constants import DATA, GPS_COLLECTION, State, Gains, Error
+from src.constants import PORT, DATA, GPS_COLLECTION, State, Gains, Error
 
 
-def update_rudder_angle(angle: float) -> None:
+def update_rudder_angle(old_angle: float, new_angle: float, delay_time: float) -> None:
     """Updates the rudder angle"""
 
+    # delay time is how to control the speed the servo will change angles
 
-def update_motor_power(speed: float) -> None:
+    # make the servo change from old to new degrees in increments, not all at once
+    if new_angle > old_angle:
+        for signal in range(old_angle, new_angle + 1, 1):
+            # in steps of 1 degree
+            PORT.write(signal)
+            time.sleep(delay_time)
+
+    if new_angle < old_angle:
+        for signal in range(old_angle, new_angle - 1, -1):
+            # in steps of 1 degree
+            PORT.write(signal)
+            time.sleep(delay_time)
+
+
+def update_motor_power(old_power: float, new_power: float, delay_time: float) -> None:
     """Updates the motor speed"""
+
+    # delay time is how to control the speed the motor will change power
+
+    # make the motor change from old to new power in increments, not all at once
+    if new_power > old_power:
+        for signal in range(old_power, new_power + 1, 1):
+            # in steps of 1 perent
+            PORT.write(signal)
+            time.sleep(delay_time)
+
+    if new_power < old_power:
+        for signal in range(old_power, new_power - 1, -1):
+            # in steps of 1 percent
+            PORT.write(signal)
+            time.sleep(delay_time)
 
 
 async def driver_loop(iteration_time: int = 10):
     """Driver process logic lives in here"""
     # adjust rudder loop
+    delay_time = 0.0005
     next_iteration = arrow.now().shift(seconds=iteration_time)
 
     current_point = DATA["route"].pop(0)

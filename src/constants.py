@@ -10,8 +10,24 @@ from serial import Serial
 from src.data_classes.sensor.data_in import GpsCoord
 from src.events.event_type import EventType
 
+PORT = serial.Serial("/dev/cu.usbserial-0001", 115200, timeout=0.5)
+
+
 SERIAL: Optional[Serial] = None
 MONGO_CLIENT: Optional[MongoClient] = None
+
+
+class Limit(Enum):
+    """Limits for the USV"""
+
+    MAX_RUDDER_ANGLE = 180
+    MIN_RUDDER_ANGLE = 0
+    MAX_MOTOR_POWER = 100
+    MIN_MOTOR_POWER = 0
+
+
+OLD_DEGREES = Limit.MIN_RUDDER_ANGLE.value  # initialize the previous tilt degree
+OLD_POWER = Limit.MIN_MOTOR_POWER.value  # initialize the previous power percentage
 
 
 class Error(Enum):
