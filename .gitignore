@@ -139,3 +139,12 @@ cython_debug/
 src/database/data/db/
 
 .DS_Store
+
+# Credentials
+# Ask your lead to get credential information in these files
+src/app.py
+config.json
+
+# Visual Studio Folder
+# It stores opened documents, breakpoints and other information about state of your solution
+vs/

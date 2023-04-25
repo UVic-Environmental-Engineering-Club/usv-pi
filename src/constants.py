@@ -6,14 +6,14 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from pymongo import MongoClient
 
 import socketio
-from serial import Serial
+import serial
 from src.data_classes.sensor.data_in import GpsCoord
 from src.events.event_type import EventType
 
-PORT = serial.Serial("/dev/cu.usbserial-0001", 115200, timeout=0.5)
+SERIAL = serial.Serial("/dev/cu.usbserial-0001", 115200, timeout=0.5)
 
 
-SERIAL: Optional[Serial] = None
+SERIAL: Optional[serial.Serial] = None
 MONGO_CLIENT: Optional[MongoClient] = None
 
 
@@ -34,7 +34,7 @@ with open(file="config.json", mode="r", encoding="utf-8") as file:
     env = config["env"]
 
     try:
-        SERIAL = Serial(config["port"], config["baudrate"], timeout=config["timeout"])
+        SERIAL = serial.Serial(config["port"], config["baudrate"], timeout=config["timeout"])
     except Exception as error:
         print("Could not open serial port.", error)
         SERIAL = None
