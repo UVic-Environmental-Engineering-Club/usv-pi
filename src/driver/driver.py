@@ -5,11 +5,10 @@ import math
 import asyncio
 from xmlrpc.client import boolean
 import arrow
-import utm
 
 
 from src.data_classes.sensor.data_in import GpsCoord
-from src.constants import PORT, DATA, GPS_COLLECTION, State, Gains, Error
+from src.constants import SERIAL, DATA, GPS_COLLECTION, State, Gains, Error
 
 
 def correct_rudder_angle(
@@ -33,7 +32,7 @@ def correct_rudder_angle(
     rudder_angle = math.degrees(
         math.atan2(2 * math.sin(angle_diff), 1 + math.cos(angle_diff))
     )
-    PORT.write(rudder_angle)
+    SERIAL.write(rudder_angle)
     time.sleep(delay_time)
 
 
@@ -53,7 +52,7 @@ def correct_motor_power(
     motor_power = max(
         -1, min(1, speed_diff * 2)
     )  # assuming maximum power range of -1 to 1
-    PORT.write(motor_power)
+    SERIAL.write(motor_power)
     time.sleep(delay_time)
 
 
@@ -81,10 +80,6 @@ async def driver_loop(iteration_time: int = 10):
         # Get most recent gps coordinate from database
         current_location = GPS_COLLECTION.find_one(sort=[("timestamp", -1)])
 
-
-def geographic_to_UTM(point: GpsCoord) -> tuple[float, float, float]:
-    """Converts a point from geographic coordinates to UTM coordinates"""
-    return utm.from_latlon(point.lat, point.long)
 
 
 def heading(x, y) -> float:
