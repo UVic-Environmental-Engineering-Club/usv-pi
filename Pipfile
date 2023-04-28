@@ -11,6 +11,7 @@ pyserial = "*"
 python-socketio = {extras = ["asyncio_client"], version = "*"}
 pymongo = "*"
 dnspython = "*"
+threading = "*"
 
 [dev-packages]
 
