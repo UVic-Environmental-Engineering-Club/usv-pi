@@ -36,8 +36,8 @@ with open(file="config.json", mode="r", encoding="utf-8") as file:
     env = config["env"]
 
     try:
-        SERIALccb = serial.Serial(config["portccb"], config["baudrateccb"], timeout=config["timeoutccb"])
-        SERIALpdb = serial.Serial(config["portpdb"], config["baudratepdb"], timeout=config["timeoutpdb"])
+        SERIALccb = serial.Serial(config["portccb"], config["baudrate"], timeout=config["timeout"])
+        SERIALpdb = serial.Serial(config["portpdb"], config["baudrate"], timeout=config["timeout"])
     except Exception as error:
         print("Could not open serial port.", error)
         SERIAL = None

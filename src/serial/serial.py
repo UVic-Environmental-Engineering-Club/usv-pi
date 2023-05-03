@@ -1,23 +1,41 @@
-""" Functions for things related to serial and pySerial """
-"""We are using thread6 to import threading"""
 import asyncio
 import threading
+import time
 from src.events.event_type import EventType
 from src.events.events import post_event
-from src.constants import SERIAL
+from src.constants import SERIALccb, SERIALpdb
+""" Functions for things related to serial and pySerial """
+""" We are using thread6 to import threading """
+
 
 thread_flag = None
 
 
-def reading():
+def readingccb():
     global thread_flag
     thread_flag = 'reading'
-    while thread_flag != 'reading': asyncio.sleep( 0.001 )
+    while thread_flag != 'reading': time.sleep( 0.001 )
 
+    """Do reading"""
     while thread_flag == 'reading':
-        """Do reading"""
-        if SERIAL.is_open == True:
-            message = SERIAL.readline().decode("utf8").strip()
+        if SERIALccb.is_open is True:
+            message = SERIALccb.readline().decode("utf8").strip()
+            if message:
+                post_event(EventType.SERIAL_IN, message)
+
+
+    thread_flag = "reading done"
+
+
+def readingpdb():
+    global thread_flag
+    thread_flag = 'reading'
+    while thread_flag != 'reading': time.sleep( 0.001 )
+    
+    """Do reading"""
+    while thread_flag == 'reading':
+        if SERIALpdb.is_open is True:
+            message = SERIALpdb.readline().decode("utf8").strip()
             if message:
                 post_event(EventType.SERIAL_IN, message)
 
@@ -26,14 +44,14 @@ def reading():
 
 
 """Figure out what do we write"""
-def writing():
+def writingccb():
     global thread_flag
     thread_flag = 'writing'
-    while thread_flag != 'writing': asyncio.sleep( 0.001 )
+    while thread_flag != 'writing': time.sleep( 0.001 )
 
     while thread_flag == 'writing':
         """Do writing"""
-        if SERIAL.is_open == True:
+        if SERIALccb.is_open is True:
             message = """What is the message?"""
             if message:
                 post_event(EventType.SERIAL_OUT, message)
@@ -41,7 +59,25 @@ def writing():
 
     thread_flag = "writing done"
 
+"""Figure out what do we write"""
+def writingpdb():
+    global thread_flag
+    thread_flag = 'writing'
+    while thread_flag != 'writing': time.sleep( 0.001 )
 
+    while thread_flag == 'writing':
+        """Do writing"""
+        if SERIALpdb.is_open is True:
+            message = """What is the message?"""
+            if message:
+                post_event(EventType.SERIAL_OUT, message)
+    
+
+    thread_flag = "writing done"
+
+def stop():
+    global thread_flag
+    thread_flag = 'stop'
 
 
 async def serial_loop():
@@ -51,19 +87,27 @@ async def serial_loop():
 
     while True:
         await asyncio.sleep(0.001)
-        if not SERIAL:
+        if not SERIALccb or not SERIALpdb:
             print("Serial not initialized")
             continue
 
         try:
-            t1 = threading.Thread(target = reading)
-            t2 = threading.Thread(target = writing, args=[])
+            t1 = threading.Thread(target = readingccb)
+            t2 = threading.Thread(target = writingccb, args=[])
+            t3 = threading.Thread(target = readingpdb)
+            t4 = threading.Thread(target = writingpdb, args=[])
             """Figure out what is args for this case"""
             t1.start()
-            asyncio.sleep(0.5)
+            asyncio.sleep(0.25)
             """This could be the reading/writing speed"""
             t2.start()
-            asyncio.sleep(0.5)
+            asyncio.sleep(0.25)
+            """This could be the reading/writing speed"""
+            t3.start()
+            asyncio.sleep(0.25)
+            """This could be the reading/writing speed"""
+            t4.start()
+            asyncio.sleep(0.25)
             """This could be the reading/writing speed"""
 
 
