@@ -1,9 +1,13 @@
 {
   "env": "dev",
-  "port": "/dev/cu.usbserial-0001",
-  "baudrate": 115200,
-  "bytesize": 8,
-  "timeout": 0.5,
+  "portccb": "/dev/cu.usbserial-0001",
+  "baudrateccb": 115200,
+  "bytesizeccb": 8,
+  "timeoutccb": 0.5,
+  "portpdb": "/dev/cu.usbserial-0001",
+  "baudratepdb": 115200,
+  "bytesizepdb": 8,
+  "timeoutpdb": 0.5,
 
   "mongo_url_prod": "mongodb://localhost:27017/",
   "mongo_url_dev": "mongodb+srv://uveec:<password>@cluster0.tewjo.mongodb.net/sensors",

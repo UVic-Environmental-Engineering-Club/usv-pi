@@ -1,6 +1,7 @@
 """ Functions for things related to serial and pySerial """
+"""We are using thread6 to import threading"""
 import asyncio
-import threading """Don't forget to add it on piplock"""
+import threading
 from src.events.event_type import EventType
 from src.events.events import post_event
 from src.constants import SERIAL
@@ -18,23 +19,24 @@ def reading():
         if SERIAL.is_open == True:
             message = SERIAL.readline().decode("utf8").strip()
             if message:
-                await post_event(EventType.SERIAL_IN, message)
+                post_event(EventType.SERIAL_IN, message)
 
 
     thread_flag = "reading done"
 
 
-def writing(): """Figure out what do we write"""
+"""Figure out what do we write"""
+def writing():
     global thread_flag
     thread_flag = 'writing'
     while thread_flag != 'writing': asyncio.sleep( 0.001 )
 
-    while thread_flag = 'writing':
+    while thread_flag == 'writing':
         """Do writing"""
         if SERIAL.is_open == True:
             message = """What is the message?"""
             if message:
-                await post_event(EventType.SERIAL_OUT, message)
+                post_event(EventType.SERIAL_OUT, message)
     
 
     thread_flag = "writing done"
@@ -55,11 +57,14 @@ async def serial_loop():
 
         try:
             t1 = threading.Thread(target = reading)
-            t2 = threading.Thread(target = writing, args=[]) """Figure out what is args for this case"""
+            t2 = threading.Thread(target = writing, args=[])
+            """Figure out what is args for this case"""
             t1.start()
-            asyncio.sleep(0.5) """This could be the reading/writing speed"""
+            asyncio.sleep(0.5)
+            """This could be the reading/writing speed"""
             t2.start()
-            asyncio.sleep(0.5) """This could be the reading/writing speed"""
+            asyncio.sleep(0.5)
+            """This could be the reading/writing speed"""
 
 
         except Exception as e:

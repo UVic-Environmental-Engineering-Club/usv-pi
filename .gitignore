@@ -142,8 +142,8 @@ src/database/data/db/
 
 # Credentials
 # Ask your lead to get credential information in these files
-src/app.py
-config.json
+# src/app.py
+# config.json
 
 # Visual Studio Folder
 # It stores opened documents, breakpoints and other information about state of your solution

@@ -10,10 +10,12 @@ import serial
 from src.data_classes.sensor.data_in import GpsCoord
 from src.events.event_type import EventType
 
-SERIAL = serial.Serial("/dev/cu.usbserial-0001", 115200, timeout=0.5)
+SERIALccb = serial.Serial("/dev/cu.usbserial-0001", 115200, timeout=0.5)
+SERIALpdb = serial.Serial("/dev/cu.usbserial-0002", 115200, timeout=0.5)
 
 
-SERIAL: Optional[serial.Serial] = None
+SERIALccb: Optional[serial.Serial] = None
+SERIALpdb: Optional[serial.Serial] = None
 MONGO_CLIENT: Optional[MongoClient] = None
 
 
@@ -34,7 +36,8 @@ with open(file="config.json", mode="r", encoding="utf-8") as file:
     env = config["env"]
 
     try:
-        SERIAL = serial.Serial(config["port"], config["baudrate"], timeout=config["timeout"])
+        SERIALccb = serial.Serial(config["portccb"], config["baudrateccb"], timeout=config["timeoutccb"])
+        SERIALpdb = serial.Serial(config["portpdb"], config["baudratepdb"], timeout=config["timeoutpdb"])
     except Exception as error:
         print("Could not open serial port.", error)
         SERIAL = None
