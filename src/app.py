@@ -29,7 +29,7 @@ async def run():
     SIO.register_namespace(USVNameSpace("/usv"))
 
     try:
-        await SIO.connect("http://localhost:8080/")
+        await SIO.connect("http://localhost:8080")
     except Exception as error:
         print("Could not open socket.io connection.", error)
 

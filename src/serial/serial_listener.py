@@ -3,7 +3,7 @@
 from src.events.event_type import EventType
 from src.events.events import subscribe
 from src.data_classes.sensor.data_out import SensorOut
-from src.constants import SERIAL
+from src.constants import SERIALccb
 from src.events.events import post_event
 from src.serial.parse_input import parse_string
 
@@ -24,13 +24,13 @@ async def handle_serial_in(message: str):
 
 async def handle_serial_out(data: SensorOut):
     """Handles serial data out events"""
-    if not SERIAL:
+    if not SERIALccb:
         print("Serial not initialized")
         return
 
     try:
-        if SERIAL.is_open is True:
-            SERIAL.write(str.encode(data))
+        if SERIALccb.is_open is True:
+            SERIALccb.write(str.encode(data))
             print("sent to serial: " + data)
     except Exception as error:
         print("Error writing to serial", error)

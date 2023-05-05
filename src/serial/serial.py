@@ -3,7 +3,7 @@ import threading
 import time
 from src.events.event_type import EventType
 from src.events.events import post_event
-from src.constants import SERIALccb, SERIALpdb
+from src.constants import SERIALccb #, SERIALpdb
 """ Functions for things related to serial and pySerial """
 """ We are using thread6 to import threading """
 
@@ -94,8 +94,8 @@ async def serial_loop():
         try:
             t1 = threading.Thread(target = readingccb)
             t2 = threading.Thread(target = writingccb, args=[])
-            t3 = threading.Thread(target = readingpdb)
-            t4 = threading.Thread(target = writingpdb, args=[])
+            """t3 = threading.Thread(target = readingpdb)
+            t4 = threading.Thread(target = writingpdb, args=[])"""
             """Figure out what is args for this case"""
             t1.start()
             asyncio.sleep(0.25)
@@ -103,11 +103,11 @@ async def serial_loop():
             t2.start()
             asyncio.sleep(0.25)
             """This could be the reading/writing speed"""
-            t3.start()
-            asyncio.sleep(0.25)
+            """t3.start()
+            asyncio.sleep(0.25)"""
             """This could be the reading/writing speed"""
-            t4.start()
-            asyncio.sleep(0.25)
+            """t4.start()
+            asyncio.sleep(0.25)"""
             """This could be the reading/writing speed"""
 
 

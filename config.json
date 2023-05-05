@@ -1,7 +1,7 @@
 {
   "env": "dev",
-  "portccb": "/dev/cu.usbserial-0001",
-  "portpdb": "/dev/cu.usbserial-0002",
+  "portccb": "COM7",
+  "portpdb": "COM5",
   "baudrate": 115200,
   "bytesize": 8,
   "timeout": 0.5,
