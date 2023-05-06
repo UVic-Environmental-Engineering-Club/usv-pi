@@ -61,7 +61,7 @@ async def collision_detection_loop():
 
         if cd_state is CDState.TURN_LEFT:
             while middle < 20 or right < 20:
-                driver.turn_left()
+                # driver.turn_left()
                 await asyncio.sleep(1)
                 left, middle, right = get_lid_data()
 
@@ -69,7 +69,7 @@ async def collision_detection_loop():
 
         if cd_state is CDState.TURN_RIGHT:
             while middle < 20 or left < 20:
-                driver.turn_right()
+                # driver.turn_right()
                 await asyncio.sleep(1)
                 left, middle, right = get_lid_data()
 
